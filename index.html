@@ -1,31 +1,58 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta name="robots" content="noindex">
 <title>clipd</title>
-<style>body{font:16px system-ui,sans-serif;background:#0d0d12;color:#ececf3;display:grid;place-items:center;min-height:100vh;margin:0}a{color:#9d7bff}</style>
+<style>
+  body{font:16px/1.6 system-ui,sans-serif;background:#0d0d12;color:#ececf3;margin:0}
+  main{max-width:720px;margin:0 auto;padding:48px 16px}
+  h1{font-size:2rem;margin:0 0 8px}h2{font-size:1.2rem;margin-top:32px}
+  a{color:#9d7bff}.muted{color:#a0a0b0}ol li{margin:6px 0}
+  footer{margin-top:48px;padding-top:16px;border-top:1px solid #2a2a35;font-size:.9rem}
+  #back{display:none}
+</style>
+<script>
+  // clipd's way back from TikTok (Login Kit). TikTok wants an HTTPS
+  // redirect URI; when TikTok sends the browser here with its parameters
+  // (code, state or error), this page sends it on to the dashboard on the
+  // local network. The code is single use and worthless without the app
+  // secret, which stays on the user's device. Change DASHBOARD if the
+  // dashboard has another address. Without parameters, the page presents
+  // clipd.
+  var DASHBOARD = "http://clipd.local";
+  var params = new URLSearchParams(window.location.search);
+  if (params.has("code") || params.has("error")) {
+    window.location.replace(DASHBOARD + "/tiktok/callback" + window.location.search);
+    document.documentElement.className = "back";
+  }
+</script>
+<style>.back #about{display:none}.back #back{display:block}</style>
 </head>
 <body>
-<!--
-  clipd's way back from TikTok (Login Kit). TikTok wants an HTTPS
-  redirect URI; this static page (GitHub Pages) sends the browser on to
-  the dashboard on the local network, with TikTok's parameters (code,
-  state). The code is single use and worthless without the app secret,
-  which stays on the Pi. Change DASHBOARD if the dashboard has another
-  address.
--->
-<p id="msg">Retour vers clipd…</p>
-<script>
-  var DASHBOARD = "http://clipd.local";
-  var target = DASHBOARD + "/tiktok/callback" + window.location.search;
-  document.getElementById("msg").innerHTML =
-    'Retour vers clipd… <a id="go">continuer</a>';
-  document.getElementById("go").href = target;
-  window.location.replace(target);
-</script>
-<noscript><p>Active JavaScript, ou ouvre clipd et recommence la connexion.</p></noscript>
+<main>
+  <p id="back">Returning to clipd… If nothing happens, open clipd on your local network and connect again.</p>
+  <div id="about">
+    <h1>clipd</h1>
+    <p class="muted">A self-hosted tool that turns Twitch clips into vertical videos and publishes them to your TikTok account.</p>
+
+    <h2>What it does</h2>
+    <ol>
+      <li>Finds popular clips on the Twitch channels and categories you follow (public Twitch API).</li>
+      <li>Edits each clip into a vertical 9:16 video with captions and a caption text suggestion, on your own device.</li>
+      <li>You review every video in the clipd dashboard: approve, retouch or reject it.</li>
+      <li>For an approved video, you open “Publish to TikTok”, check the caption, choose who can see it, which interactions are allowed (comments, duet, stitch) and whether it is commercial content, then agree to the post. clipd publishes it to your TikTok account (Content Posting API) as soon as possible or at the time you chose, and shows its status.</li>
+    </ol>
+    <p>Nothing is sent to TikTok until you agree to a post. clipd runs on your own computer or Raspberry Pi; there is no clipd server and no clipd account.</p>
+
+    <h2>Content rights</h2>
+    <p>Twitch clips belong to their streamers. clipd credits the streamer on each video, and you should only publish clips of streamers who allowed you to do so.</p>
+
+    <footer>
+      <a href="terms.html">Terms of Service</a> · <a href="privacy.html">Privacy Policy</a> · Contact: <a href="mailto:yassinam.pro@gmail.com">yassinam.pro@gmail.com</a>
+    </footer>
+  </div>
+</main>
 </body>
 </html>
