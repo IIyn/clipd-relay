@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>clipd</title>
+<style>
+  body{font:16px/1.6 system-ui,sans-serif;background:#0d0d12;color:#ececf3;margin:0}
+  main{max-width:720px;margin:0 auto;padding:48px 16px}
+  a{color:#9d7bff}
+</style>
+<script>
+  // clipd's way back from Google (OAuth). Google wants an HTTPS redirect URI;
+  // when it sends the browser here with its parameters (code, state or
+  // error), this page sends it on to the dashboard on the local network.
+  // The code is single use and worthless without the app secret, which
+  // stays on the user's device. Change DASHBOARD if the dashboard has
+  // another address.
+  var DASHBOARD = "http://clipd.local";
+  var params = new URLSearchParams(window.location.search);
+  if (params.has("code") || params.has("error")) {
+    window.location.replace(DASHBOARD + "/youtube/callback" + window.location.search);
+  }
+</script>
+</head>
+<body>
+<main>
+  <p>Returning to clipd… If nothing happens, open clipd on your local network and connect again.</p>
+  <p><a href="../">About clipd</a> · <a href="../privacy.html">Privacy Policy</a> · <a href="../terms.html">Terms of Service</a></p>
+</main>
+</body>
+</html>
